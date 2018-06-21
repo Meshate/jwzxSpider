@@ -23,7 +23,7 @@ def work(url):
 
 if __name__ == '__main__':
     if len(sys.argv) < 4:
-        print(f'Usage: {sys.argv[0]} [username] [password] [database]\n')
+        print(f'Usage: python {sys.argv[0]} [username] [password] [database]\n')
         exit(-1)
     sql = sqltool.sql_con('root', 'Li19638176', 'school')
     sql.create_table()
