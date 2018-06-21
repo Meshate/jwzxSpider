@@ -14,11 +14,12 @@
 - html-table-extractor
 - beautifulsoup4
 - mysql-connector-python
+- tqdm
 
 ## To run
 ### Notice
 
-**Make sure there is no table named stu in the current database**
+**Make sure there is no table named "stu" in the current database**
 
 #### If local mysql
 
