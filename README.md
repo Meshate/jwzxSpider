@@ -16,7 +16,12 @@
 - mysql-connector-python
 
 ## To run
+### Notice
+
+**Make sure there is no table named stu in the current database**
+
 #### If local mysql
+
 `python main.py [username] [password] [database]`
 
 #### If mysql server
