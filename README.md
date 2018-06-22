@@ -14,7 +14,10 @@
 - html-table-extractor
 - beautifulsoup4
 - mysql-connector-python
-- tqdm
+
+#### install pip package
+
+`pip install requests html-table-extractor beautifulsoup4 mysql-connector-python`
 
 ## To run
 ### Notice
