@@ -1,31 +1,15 @@
 import sys
 import requests
 import sqltool
-from bs4 import BeautifulSoup
-from html_table_extractor.extractor import Extractor
 from tqdm import tqdm
+import json
 
-urls = 'http://jwzx.cqupt.edu.cn/jwzxtmp/pubBjsearch.php?action=bjStu'
-stu = 'http://jwzx.cqupt.edu.cn/jwzxtmp/'
-
-
-def work(url):
-    data = requests.get(url=url)
-    extractor = Extractor(''.join(data.text))
-    extractor.parse()
-    result = extractor.return_list()
-    del result[0]
-    for i in result:
-        del i[0]
-        del i[4]
-        del i[-3:]
-        sql.set_info(i)
-
+url = 'http://jwzx.cqupt.edu.cn/data/json_StudentSearch.php?searchKey='
 
 if __name__ == '__main__':
     if len(sys.argv) < 4:
         print(
-            f'Usage: python {sys.argv[0]} [username] [password] [database]\n')
+            f'Usage: $ python {sys.argv[0]} [username] [password] [database]\n')
         exit(-1)
     if len(sys.argv) == 4:
         sql = sqltool.sql_con(sys.argv[1], sys.argv[2], sys.argv[3])
@@ -33,9 +17,20 @@ if __name__ == '__main__':
         sql = sqltool.sql_con(sys.argv[1], sys.argv[2], sys.argv[3],
                               sys.argv[4])
     sql.create_table()
-    data = requests.get(url=urls)
-    soup = BeautifulSoup(data.text, 'lxml')
-    link = soup.find_all('a', target='_blank')
-    for i in tqdm(link):
-        work(stu + i['href'])
-        sp = i['href'].split('=')
+
+
+    pbar = tqdm(total=630)
+
+    for i in '012345678':
+        for j in '0123456':
+            pbar.update(10)
+            for k in '0123456789':
+                search_by = '201' + i + '21' + j + k
+                data = requests.get(url=url + search_by)
+                part = json.loads(data.text)['returnData']
+                if len(part) == 0:
+                    break
+                else:
+                    for any in part:
+                        sql.insert_data(any)
+

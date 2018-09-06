@@ -13,27 +13,37 @@ class sql_con():
         self.cursor = self.conn.cursor()
         sql = """CREATE TABLE `stu` (
                   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-                  `studentnum` varchar(30) DEFAULT NULL,
+                  `student_num` varchar(30) DEFAULT NULL,
                   `name` varchar(30) DEFAULT NULL,
+                  `class_num` varchar(20) DEFAULT NULL,
+                  `major` varchar(50) DEFAULT NULL,
+                  `college` varchar(50) DEFAULT NULL,
                   `gender` varchar(10) DEFAULT NULL,
-                  `classnum` varchar(30) DEFAULT NULL,
-                  `major` varchar(40) DEFAULT NULL,
-                  `college` varchar(60) DEFAULT NULL,
+                  `birthday` varchar(20) DEFAULT NULL,
+                  `mz` varchar(20) DEFAULT NULL,
                   PRIMARY KEY (`id`)
-                ) ENGINE = InnoDB DEFAULT CHARSET = utf8; """
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;"""
         try:
             self.cursor.execute(sql)
             self.conn.commit()
-            self.cursor.close()
         except Exception as e:
-            return e
+            print(e)
+            self.conn.rollback()
+        finally:
+            self.cursor.close()
 
-    def set_info(self, data):
+    def insert_data(self, data):
         self.cursor = self.conn.cursor()
         sql = f"""INSERT INTO stu 
-        ( studentnum, name, gender, classnum, major, college )
+        ( student_num, name, gender, class_num, major, college, birthday, mz )
         VALUES
-        ( \"{data[0]}\", \"{data[1]}\", \"{data[2]}\", \"{data[3]}\", \"{data[4]}\", \"{data[5]}\" );"""
-        self.cursor.execute(sql)
-        self.conn.commit()
-        self.cursor.close()
+        ( %s, %s, %s, %s, %s, %s, %s, %s );"""
+        try:
+            self.cursor.execute(sql, (
+            data['xh'], data['xm'], data['xb'], data['bj'], data['zym'], data['yxm'], data['csrq'], data['mz']))
+            self.conn.commit()
+        except Exception as e:
+            print(e)
+            self.conn.rollback()
+        finally:
+            self.cursor.close()
