@@ -18,8 +18,7 @@ if __name__ == '__main__':
                               sys.argv[4])
     sql.create_table()
 
-
-    pbar = tqdm(total=630)
+    pbar = tqdm(total=632)
 
     for i in '012345678':
         for j in '0123456':
@@ -34,3 +33,9 @@ if __name__ == '__main__':
                     for any in part:
                         sql.insert_data(any)
 
+    for i in ['L1', 'L2']:
+        data = requests.get(url=url + i)
+        part = json.loads(data.text)['returnData']
+        for any in part:
+            sql.insert_data(any)
+        pbar.update(1)
